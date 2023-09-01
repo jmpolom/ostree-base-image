@@ -1,4 +1,0 @@
-include:
-  - c9s-base.yaml
-  - oscore/kernel.yaml
-

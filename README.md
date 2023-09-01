@@ -12,10 +12,6 @@ via `rpm-ostree compose image`.
 
 [ghcr.io/cgwalters/fedora-oscore](https://github.com/cgwalters/bootc-demo-base-images/pkgs/container/fedora-oscore)
 
-### CentOS Stream 9
-
-[ghcr.io/cgwalters/c9s-oscore](https://github.com/cgwalters/bootc-demo-base-images/pkgs/container/c9s-oscore)
-
 ## What's in them?
 
 The [current manifest definitions](oscore/) were forked from Fedora CoreOS, then some things were
