@@ -1,13 +1,10 @@
 name: Build
 
 on:
+  workflow_dispatch:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-  schedule:
-    - cron:  '30 0,6,12,18 * * *'
-  workflow_dispatch: {}
+    branches:
+      - main
 
 env:
   REGISTRY: ghcr.io
@@ -19,10 +16,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        os: ["fedora", "c9s", "c9s-rt"]
     container:
       # Yes, we're using this as a *builder* image.
       image: quay.io/fedora/fedora-coreos:stable
@@ -41,4 +34,4 @@ jobs:
       - run: echo "force_initialize=1" >> $GITHUB_ENV
         if: github.event_name == 'workflow_dispatch'
       - name: Build ostree container
-        run: rpm-ostree compose image --format=registry ${force_initialize:+--initialize} ${{ matrix.os }}.yaml ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ matrix.os }}-oscore
+        run: rpm-ostree compose image --format=registry ${force_initialize:+--initialize} fedora.yaml registry:${{ env.REGISTRY }}/${{ github.repository_owner }}/fedora-ostree-base:latest
