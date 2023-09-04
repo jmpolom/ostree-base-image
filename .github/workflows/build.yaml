@@ -34,4 +34,4 @@ jobs:
       - run: echo "force_initialize=1" >> $GITHUB_ENV
         if: github.event_name == 'workflow_dispatch'
       - name: Build ostree container
-        run: rpm-ostree compose image --format=registry ${force_initialize:+--initialize} fedora.yaml registry:${{ env.REGISTRY }}/${{ github.repository_owner }}/fedora-ostree-base:latest
+        run: rpm-ostree compose image --format=registry ${force_initialize:+--initialize} fedora.yaml ${{ env.REGISTRY }}/${{ github.repository_owner }}/fedora-ostree-base:latest
