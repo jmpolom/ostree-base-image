@@ -1,4 +1,4 @@
-releasever: 38
+releasever: 39
 
 repos:
   - fedora
@@ -11,8 +11,8 @@ metadata:
   summary: Fedora OSCore
 
 include:
-  - oscore/manifest.yaml
-  - oscore/kernel.yaml
+  - trees/manifest.yaml
+  - trees/kernel.yaml
 
 repo-packages:
   - repo: bootc-fedora
