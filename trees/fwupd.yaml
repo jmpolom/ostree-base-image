@@ -1,5 +1,3 @@
 # Firmware updates
-packages-aarch64:
-  - fwupd
-packages-x86_64:
+packages:
   - fwupd

@@ -1,10 +1,9 @@
 
 # Modern defaults we want
 boot-location: modules
-tmp-is-dir: true
 # This one at least historically broke compatibility with Anaconda, but
 # let's use it by default now.
-machineid-compat: false
+machineid-compat: true
 # Be minimal
 recommends: false
 
@@ -35,9 +34,7 @@ include:
 
 remove-from-packages:
   # Generally we expect other tools to do this (e.g. Ignition or cloud-init)
-  - [systemd, /usr/bin/systemd-firstboot,
-              /usr/lib/systemd/system/systemd-firstboot.service,
-              /usr/lib/systemd/system/sysinit.target.wants/systemd-firstboot.service]
+  - [systemd, /usr/lib/systemd/system/sysinit.target.wants/systemd-firstboot.service]
   # We don't want auto-generated mount units. See also
   # https://github.com/systemd/systemd/issues/13099
   - [systemd-udev, /usr/lib/systemd/system-generators/systemd-gpt-auto-generator]
@@ -111,14 +108,6 @@ packages-ppc64le:
   - ppc64-diag-rtas
 packages-aarch64:
   - irqbalance
-  - qemu-user-static-x86
-packages-s390x:
-  - qemu-user-static-x86
-
-# See https://github.com/coreos/bootupd
-arch-include:
-  x86_64: bootupd.yaml
-  aarch64: bootupd.yaml
 
 postprocess:
   # Undo RPM scripts enabling units; we want the presets to be canonical
