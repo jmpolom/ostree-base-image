@@ -12,11 +12,6 @@ include:
   - trees/manifest.yaml
   - trees/kernel.yaml
 
-repo-packages:
-  - repo: bootc-fedora
-    packages:
-      - bootc
-
 packages:
   # We include this for historical reasons
   - fedora-repos-ostree
