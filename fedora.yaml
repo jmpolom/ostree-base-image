@@ -3,8 +3,6 @@ releasever: 39
 repos:
   - fedora
   - fedora-updates
-  - coreos-continuous-fedora
-  - bootc-fedora
 
 metadata:
   name: fedora-oscore
