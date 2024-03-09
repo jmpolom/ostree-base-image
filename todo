@@ -1,6 +1,6 @@
 [*] Add btrfsprogs
-[ ] initramfs
-[ ] persistent journal
-[ ] basic fixes
+[*] initramfs
+[*] persistent journal
+[*] basic fixes
 [ ] high level packages
-[ ] ONE PACKAGE PER LIST ITEM
+[*] ONE PACKAGE PER LIST ITEM

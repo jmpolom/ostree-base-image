@@ -1,5 +1,6 @@
 # These are packages that are related to configuring parts of the system.
 
+# This can likely be removed due to dracut configuration
 initramfs-args:
   - "--no-hostonly"
   - "--add"

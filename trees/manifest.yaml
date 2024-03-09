@@ -50,12 +50,15 @@ packages:
   - nano
   # TODO: Also consider dropping this
   - systemd-container
-  - fuse-overlayfs slirp4netns
+  - fuse-overlayfs
+  - slirp4netns
   # support for old style CNI networks and name resolution for
   # podman containers with CNI networks
   # https://github.com/coreos/fedora-coreos-tracker/issues/519
   # https://github.com/coreos/fedora-coreos-tracker/issues/1128#issuecomment-1071338097
-  - containernetworking-plugins podman-plugins dnsmasq
+  - containernetworking-plugins
+  - podman-plugins
+  - dnsmasq
   # For podman v4 netavark gets pulled in but it only recommends
   # aardvark-dns (which provides name resolution based on container
   # names). This functionality was previously provided by dnsname from
@@ -72,22 +75,25 @@ packages:
   - nfs-utils-coreos
   # Additional firewall support; we aren't including these in RHCOS or they
   # don't exist in RHEL
-  - iptables-nft iptables-services
+  - iptables-nft
+  - iptables-services
   - WALinuxAgent-udev
   # Allow communication between sudo and SSSD
   # for caching sudo rules by SSSD.
   # https://github.com/coreos/fedora-coreos-tracker/issues/445
   - libsss_sudo
   # SSSD; we only ship a subset of the backends
-  - sssd-client sssd-ad sssd-ipa sssd-krb5 sssd-ldap
+  - sssd-client
+  - sssd-ad
+  - sssd-ipa
+  - sssd-krb5
+  - sssd-ldap
   # Used by admins interactively
   - attr
   - openssl
   - lsof
   # Provides terminal tools like clear, reset, tput, and tset
   - ncurses
-  # Improved MOTD experience
-  - console-login-helper-messages-motdgen
   # i18n
   - kbd
   # zram-generator (but not zram-generator-defaults) for F33 change

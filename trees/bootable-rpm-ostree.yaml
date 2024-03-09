@@ -1,5 +1,7 @@
 packages:
- - rpm-ostree ostree nss-altfiles
+ - rpm-ostree
+ - ostree
+ - nss-altfiles
 
 exclude-packages:
   # Exclude kernel-debug-core to make sure that it doesn't somehow get

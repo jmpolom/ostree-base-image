@@ -22,7 +22,8 @@ packages:
   # https://github.com/coreos/fedora-coreos-tracker/issues/622
   - kexec-tools
   # Remote Access
-  - openssh-clients openssh-server
+  - openssh-clients
+  - openssh-server
   # Container tooling
   - crun
   - podman
