@@ -25,12 +25,18 @@ check-groups:
   filename: "group"
 
 include:
-  - bootc.yaml
   - bootable-rpm-ostree.yaml
-  - networking-tools.yaml
-  - system-configuration.yaml
-  - user-experience.yaml
+  - bootc.yaml
+  - bootupd.yaml
+  - dracut.yaml
   - fwupd.yaml
+  - grub2-removals.yaml
+  - networking-tools.yaml
+  - persistent-journal.yaml
+  - system-configuration.yaml
+  - tmpfiles.d.yaml
+  - tmpfs.yaml
+  - user-experience.yaml
 
 remove-from-packages:
   # Generally we expect other tools to do this (e.g. Ignition or cloud-init)
