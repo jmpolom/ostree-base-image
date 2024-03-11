@@ -25,7 +25,6 @@ check-groups:
   filename: "group"
 
 include:
-  - bootable-rpm-ostree.yaml
   - bootc.yaml
   - bootupd.yaml
   - dracut.yaml
@@ -51,61 +50,35 @@ automatic-version-prefix: "${releasever}.<date:%Y%m%d>"
 mutate-os-release: "${releasever}"
 
 packages:
-  # Include and set the default editor
   - nano
-  # TODO: Also consider dropping this
   - systemd-container
   - fuse-overlayfs
   - slirp4netns
-  # support for old style CNI networks and name resolution for
-  # podman containers with CNI networks
-  # https://github.com/coreos/fedora-coreos-tracker/issues/519
-  # https://github.com/coreos/fedora-coreos-tracker/issues/1128#issuecomment-1071338097
   - containernetworking-plugins
   - podman-plugins
   - dnsmasq
-  # For podman v4 netavark gets pulled in but it only recommends
-  # aardvark-dns (which provides name resolution based on container
-  # names). This functionality was previously provided by dnsname from
-  # podman-plugins in the podman v3 stack.
-  # See https://github.com/containers/netavark/pull/217
   - aardvark-dns
-  # Since we need `containernetworking-plugins` installed to continue
-  # to support CNI networks we need to also explicitly install
-  # `netavark` so we get both of them installed since both of them
-  # provide `container-network-stack`.
-  # https://github.com/coreos/fedora-coreos-tracker/issues/1128#issuecomment-1071458717
   - netavark
-  # Minimal NFS client
   - nfs-utils-coreos
-  # Additional firewall support; we aren't including these in RHCOS or they
-  # don't exist in RHEL
   - iptables-nft
   - iptables-services
   - WALinuxAgent-udev
-  # Allow communication between sudo and SSSD
-  # for caching sudo rules by SSSD.
-  # https://github.com/coreos/fedora-coreos-tracker/issues/445
   - libsss_sudo
-  # SSSD; we only ship a subset of the backends
   - sssd-client
   - sssd-ad
   - sssd-ipa
   - sssd-krb5
   - sssd-ldap
-  # Used by admins interactively
   - attr
   - openssl
   - lsof
-  # Provides terminal tools like clear, reset, tput, and tset
   - ncurses
-  # i18n
   - kbd
-  # zram-generator (but not zram-generator-defaults) for F33 change
-  # https://github.com/coreos/fedora-coreos-tracker/issues/509
   - zram-generator
-  # resolved was broken out to its own package in rawhide/f35
   - systemd-resolved
+  - rpm-ostree
+  - ostree
+  - nss-altfiles
 
 # Include the qemu-user-static-x86 package on aarch64 and s390x FCOS images
 # to allow access to the large inventory of containers only built for x86_64.
@@ -152,6 +125,14 @@ postprocess:
     #!/usr/bin/env bash
     set -xeuo pipefail
     rm -f /usr/bin/dotlockfile
+  # Set up default root config
+  - |
+    #!/usr/bin/env bash
+    mkdir -p /usr/lib/ostree
+    cat > /usr/lib/ostree/prepare-root.conf << EOF
+    [sysroot]
+    readonly = true
+    EOF
 
 # Things we don't expect to ship on the host.  We currently
 # have recommends: false so these could only come in via
@@ -161,13 +142,8 @@ exclude-packages:
   - perl-interpreter
   - nodejs
   - grubby
-  - cowsay  # Just in case
-  # Let's make sure initscripts doesn't get pulled back in
-  # https://github.com/coreos/fedora-coreos-tracker/issues/220#issuecomment-611566254
+  - cowsay
   - initscripts
-  # For (datacenter/cloud oriented) servers, we want to see the details by default.
-  # https://lists.fedoraproject.org/archives/list/devel@lists.fedoraproject.org/thread/HSMISZ3ETWQ4ETVLWZQJ55ARZT27AAV3/
   - plymouth
-  # Do not use legacy ifcfg config format in NetworkManager
-  # See https://github.com/coreos/fedora-coreos-config/pull/1991
   - NetworkManager-initscripts-ifcfg-rh
+  - kernel-debug-core
