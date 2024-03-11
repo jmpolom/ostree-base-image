@@ -30,7 +30,6 @@ include:
   - bootupd.yaml
   - dracut.yaml
   - fwupd.yaml
-  - grub2-removals.yaml
   - networking-tools.yaml
   - persistent-journal.yaml
   - system-configuration.yaml
