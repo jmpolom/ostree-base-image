@@ -7,9 +7,6 @@ initramfs-args:
   - "tpm2-tss"  # We want this for systemd-cryptsetup tpm2 locking
 
 packages:
-  # Configuring SSH keys, cloud provider check-in, etc
-  # TODO: needs Ignition kargs
-  # - afterburn afterburn-dracut
   # NTP support
   - chrony
   # Storage configuration/management
@@ -19,6 +16,7 @@ packages:
   - e2fsprogs
   - sg3_utils
   - xfsprogs
+  - lvm2
   # User configuration
   - passwd
   - shadow-utils
