@@ -25,7 +25,6 @@ check-groups:
   filename: "group"
 
 include:
-  - bootc.yaml
   - bootupd.yaml
   - dracut.yaml
   - fwupd.yaml
@@ -79,6 +78,13 @@ packages:
   - rpm-ostree
   - ostree
   - nss-altfiles
+  - systemd
+  - bootc
+  - gdisk
+  - btrfs-progs
+  - dosfstools
+  - e2fsprogs
+  - xfsprogs
 
 # Include the qemu-user-static-x86 package on aarch64 and s390x FCOS images
 # to allow access to the large inventory of containers only built for x86_64.
