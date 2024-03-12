@@ -25,9 +25,6 @@ check-groups:
   filename: "group"
 
 include:
-  - networking-tools.yaml
-  - persistent-journal.yaml
-  - system-configuration.yaml
   - tmpfiles.d.yaml
   - tmpfs.yaml
   - user-experience.yaml
@@ -91,6 +88,48 @@ packages:
   - xfsprogs
   - bootupd
   - fwupd
+  # This should not be a separate package
+  - systemd-networkd
+  - hostname
+  # Route manipulation and QoS
+  - iproute
+  - iproute-tc
+  # Firewall manipulation
+  - iptables
+  - nftables
+  # Interactive network tools for admins
+  - socat
+  - net-tools
+  - bind-utils
+  # NTP support
+  - chrony
+  # Storage configuration/management
+  - cryptsetup
+  # Needed for tpm2 bound luks
+  - tpm2-tools
+  - e2fsprogs
+  - sg3_utils
+  - xfsprogs
+  - lvm2
+  # User configuration
+  - passwd
+  - shadow-utils
+  - acl
+  # Manipulating the kernel keyring; used by bootc
+  - keyutils
+  # SELinux policy
+  - selinux-policy-targeted
+  # There are things that write outside of the journal still (such as the
+  # classic wtmp, etc.). auditd also writes outside the journal but it has its
+  # own log rotation.
+  # Anything package layered will also tend to expect files dropped in
+  # /etc/logrotate.d to work. Really, this is a legacy thing, but if we don't
+  # have it then people's disks will slowly fill up with logs.
+  - logrotate
+  # Boost starving threads
+  # https://github.com/coreos/fedora-coreos-tracker/issues/753
+  - stalld
+  - ssh-key-dir
 
 # Include the qemu-user-static-x86 package on aarch64 and s390x FCOS images
 # to allow access to the large inventory of containers only built for x86_64.
@@ -126,7 +165,11 @@ exclude-packages:
   - cowsay
   - initscripts
   - plymouth
+  - NetworkManager
+  - NetworkManager-cloud-setup
   - NetworkManager-initscripts-ifcfg-rh
+  - NetworkManager-team
+  - NetworkManager-tui
   - kernel-debug-core
 
 postprocess:
@@ -177,6 +220,27 @@ postprocess:
     mkdir -p /run
     # Transforms /usr/lib/ostree-boot into a bootupd-compatible update payload
     /usr/bin/bootupctl backend generate-update-metadata /
+  # Taken from https://github.com/coreos/fedora-coreos-config/blob/aa4373201f415baff85701f7f96ab0583931af6c/overlay.d/05core/usr/lib/systemd/journald.conf.d/10-coreos-persistent.conf#L5
+  # Hardcode persistent journal by default. journald has this "auto" behaviour
+  # that only makes logs persistent if `/var/log/journal` exists, which it won't
+  # on first boot because `/var` isn't fully populated. We should be able to get
+  # rid of this once we move to sysusers and create the dir in the initrd.
+  - |
+    #!/usr/bin/env bash
+    mkdir -p /usr/lib/systemd/journald.conf.d/
+    cat > /usr/lib/systemd/journald.conf.d/10-centos-bootc-persistent.conf << 'EOF'
+    [Journal]
+    Storage=persistent
+    EOF
+  # Make kdump work on firstboot
+  - |
+    #!/usr/bin/env bash
+    # Make kdump ignore `ignition.firstboot` when copying kargs from
+    # the running kernel to the kdump kernel when passing to be kexec.
+    # This makes it so kdump can be set up on the very first boot.
+    # Upstream request to have this upstream so we can stop carrying it here:
+    # https://lists.fedoraproject.org/archives/list/kexec@lists.fedoraproject.org/thread/5P4WIJLW2TSGF4PZGRZGOXYML4RXZU23/
+    sed -i -e 's/KDUMP_COMMANDLINE_REMOVE="/KDUMP_COMMANDLINE_REMOVE="ignition.firstboot /' /etc/sysconfig/kdump
   # dracut
   - |
     #!/usr/bin/env bash
