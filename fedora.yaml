@@ -5,11 +5,11 @@ repos:
   - fedora-updates
 
 metadata:
-  name: fedora-oscore
-  summary: Fedora OSCore
+  name: fedora-ostree-base
+  summary: Fedora base image
 
 include:
-  - trees/manifest.yaml
+  - base.yaml
 
 packages:
   # We include this for historical reasons
