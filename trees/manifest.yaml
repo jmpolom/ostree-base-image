@@ -24,11 +24,6 @@ check-groups:
   type: "file"
   filename: "group"
 
-include:
-  - tmpfiles.d.yaml
-  - tmpfs.yaml
-  - user-experience.yaml
-
 remove-from-packages:
   # Generally we expect other tools to do this (e.g. Ignition or cloud-init)
   - [systemd, /usr/lib/systemd/system/sysinit.target.wants/systemd-firstboot.service]
@@ -130,6 +125,33 @@ packages:
   # https://github.com/coreos/fedora-coreos-tracker/issues/753
   - stalld
   - ssh-key-dir
+  # Basic user tools
+  - jq
+  - bash-completion
+  - coreutils
+  - file
+  - less
+  - sudo
+  # File compression/decompression
+  ## bsdtar - dependency of 35coreos-live dracut module
+  - bsdtar
+  - bzip2
+  - gzip
+  - tar
+  - xz
+  - zstd
+  # kdump support
+  # https://github.com/coreos/fedora-coreos-tracker/issues/622
+  - kexec-tools
+  # Remote Access
+  - openssh-clients
+  - openssh-server
+  # Container tooling
+  - crun
+  - podman
+  - skopeo
+  # nvme-cli for managing nvme disks
+  - nvme-cli
 
 # Include the qemu-user-static-x86 package on aarch64 and s390x FCOS images
 # to allow access to the large inventory of containers only built for x86_64.
@@ -241,6 +263,29 @@ postprocess:
     # Upstream request to have this upstream so we can stop carrying it here:
     # https://lists.fedoraproject.org/archives/list/kexec@lists.fedoraproject.org/thread/5P4WIJLW2TSGF4PZGRZGOXYML4RXZU23/
     sed -i -e 's/KDUMP_COMMANDLINE_REMOVE="/KDUMP_COMMANDLINE_REMOVE="ignition.firstboot /' /etc/sysconfig/kdump
+  # See https://github.com/containers/bootc/issues/358
+  # basically systemd-tmpfiles doesn't follow symlinks; ordinarily our
+  # tmpfiles.d unit for `/var/roothome` is fine, but this actually doesn't
+  # work if we want to use tmpfiles.d to write to `/root/.ssh` because
+  # tmpfiles gives up on that before getting to `/var/roothome`.
+  - |
+    sed -ie 's, /root, /var/roothome,' /usr/lib/tmpfiles.d/provision.conf
+  # See also https://github.com/openshift/os/blob/f6cde963ee140c02364674db378b2bc4ac42675b/common.yaml#L156
+  # This one undoes the effect of
+  # # RHEL-only: Disable /tmp on tmpfs.
+  # Wants=tmp.mount
+  # in /usr/lib/systemd/system/basic.target
+  # We absolutely must have tmpfs-on-tmp for multiple reasons,
+  # but the biggest is that when we have composefs for / it's read-only,
+  # and for units with ProtectSystem=full systemd clones / but needs
+  # a writable place.
+  - |
+    #!/usr/bin/env bash
+    set -xeuo pipefail
+    mkdir -p /usr/lib/systemd/system/local-fs.target.wants
+    if [[ ! -f /usr/lib/systemd/system/local-fs.target.wants/tmp.mount ]]; then
+      ln -sf ../tmp.mount /usr/lib/systemd/system/local-fs.target.wants
+    fi
   # dracut
   - |
     #!/usr/bin/env bash
