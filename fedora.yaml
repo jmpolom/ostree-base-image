@@ -10,7 +10,6 @@ metadata:
 
 include:
   - trees/manifest.yaml
-  - trees/kernel.yaml
 
 packages:
   # We include this for historical reasons

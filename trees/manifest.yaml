@@ -152,6 +152,9 @@ packages:
   - skopeo
   # nvme-cli for managing nvme disks
   - nvme-cli
+  - kernel
+  - kernel-tools
+  - linux-firmware
 
 # Include the qemu-user-static-x86 package on aarch64 and s390x FCOS images
 # to allow access to the large inventory of containers only built for x86_64.
