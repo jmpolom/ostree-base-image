@@ -25,9 +25,6 @@ check-groups:
   filename: "group"
 
 include:
-  - bootupd.yaml
-  - dracut.yaml
-  - fwupd.yaml
   - networking-tools.yaml
   - persistent-journal.yaml
   - system-configuration.yaml
@@ -44,6 +41,13 @@ remove-from-packages:
   # Drop some buggy sysusers fragments which do not match static IDs allocation:
   # https://bugzilla.redhat.com/show_bug.cgi?id=2105177
   - [dbus-common, /usr/lib/sysusers.d/dbus.conf]
+  # The grub bits are mainly designed for desktops, and IMO haven't seen
+  # enough testing in concert with ostree. At some point we'll flesh out
+  # the full plan in https://github.com/coreos/fedora-coreos-tracker/issues/47
+  - [grub2-tools, /etc/grub.d/08_fallback_counting,
+                  /etc/grub.d/10_reset_boot_success,
+                  /etc/grub.d/12_menu_auto_hide,
+                  /usr/lib/systemd/.*]
 
 automatic-version-prefix: "${releasever}.<date:%Y%m%d>"
 mutate-os-release: "${releasever}"
@@ -85,19 +89,45 @@ packages:
   - dosfstools
   - e2fsprogs
   - xfsprogs
+  - bootupd
+  - fwupd
 
 # Include the qemu-user-static-x86 package on aarch64 and s390x FCOS images
 # to allow access to the large inventory of containers only built for x86_64.
 # https://github.com/coreos/fedora-coreos-tracker/issues/1237
 packages-x86_64:
   - irqbalance
+  - grub2
+  - grub2-efi-x64
+  - efibootmgr
+  - shim
+  - microcode_ctl
 packages-ppc64le:
   - irqbalance
   - librtas
   - powerpc-utils-core
   - ppc64-diag-rtas
+  - grub2
+  - ostree-grub2
 packages-aarch64:
   - irqbalance
+  - grub2-efi-aa64
+  - efibootmgr
+  - shim
+
+# Things we don't expect to ship on the host.  We currently
+# have recommends: false so these could only come in via
+# hard requirement, in which case the build will fail.
+exclude-packages:
+  - perl
+  - perl-interpreter
+  - nodejs
+  - grubby
+  - cowsay
+  - initscripts
+  - plymouth
+  - NetworkManager-initscripts-ifcfg-rh
+  - kernel-debug-core
 
 postprocess:
   # Undo RPM scripts enabling units; we want the presets to be canonical
@@ -139,17 +169,31 @@ postprocess:
     [sysroot]
     readonly = true
     EOF
-
-# Things we don't expect to ship on the host.  We currently
-# have recommends: false so these could only come in via
-# hard requirement, in which case the build will fail.
-exclude-packages:
-  - perl
-  - perl-interpreter
-  - nodejs
-  - grubby
-  - cowsay
-  - initscripts
-  - plymouth
-  - NetworkManager-initscripts-ifcfg-rh
-  - kernel-debug-core
+  # bootupd
+  - |
+    #!/bin/bash
+    set -xeuo pipefail
+    # Until we have https://github.com/coreos/rpm-ostree/pull/2275
+    mkdir -p /run
+    # Transforms /usr/lib/ostree-boot into a bootupd-compatible update payload
+    /usr/bin/bootupctl backend generate-update-metadata /
+  # dracut
+  - |
+    #!/usr/bin/env bash
+    mkdir -p /usr/lib/dracut/dracut.conf.d
+    cat > /usr/lib/dracut/dracut.conf.d/20-bootc-base.conf << 'EOF'
+    # We want a generic image; hostonly makes no sense as part of a server side build
+    hostonly=no
+    dracutmodules+=" kernel-modules dracut-systemd systemd-initrd base ostree "
+    EOF
+    cat > /usr/lib/dracut/dracut.conf.d/22-bootc-generic.conf << 'EOF'
+    # Extra modules that we want by default that are known to exist in the kernel
+    dracutmodules+=" virtiofs "
+    EOF
+    cat > /usr/lib/dracut/dracut.conf.d/30-bootc-tier-1.conf << 'EOF'
+    dracutmodules+=" lvm crypt "
+    EOF
+    cat > /usr/lib/dracut/dracut.conf.d/49-bootc-tpm2-tss.conf << 'EOF'
+    # We want this for systemd-cryptsetup tpm2 locking
+    dracutmodules+=" tpm2-tss "
+    EOF
