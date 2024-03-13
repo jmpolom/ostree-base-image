@@ -45,157 +45,125 @@ automatic-version-prefix: "${releasever}.<date:%Y%m%d>"
 mutate-os-release: "${releasever}"
 
 packages:
-  - nano
-  - systemd-container
-  - fuse-overlayfs
-  - slirp4netns
-  - containernetworking-plugins
-  - podman-plugins
-  - dnsmasq
+  - WALinuxAgent-udev
   - aardvark-dns
-  - netavark
-  - nfs-utils-coreos
+  - acl
+  - attr
+  - bash-completion
+  - bind-utils
+  - bootc
+  - bootupd
+  - bsdtar
+  - btrfs-progs
+  - bzip2
+  - chrony
+  - containernetworking-plugins
+  - coreutils
+  - crun
+  - cryptsetup
+  - dnsmasq
+  - dosfstools
+  - e2fsprogs
+  - e2fsprogs
+  - file
+  - fuse-overlayfs
+  - fwupd
+  - gdisk
+  - gzip
+  - hostname
+  - iproute
+  - iproute-tc
+  - iptables
   - iptables-nft
   - iptables-services
-  - WALinuxAgent-udev
+  - jq
+  - kbd
+  - kernel
+  - kernel-tools
+  - kexec-tools
+  - keyutils
+  - less
   - libsss_sudo
-  - sssd-client
+  - linux-firmware
+  - logrotate
+  - lsof
+  - lvm2
+  - nano
+  - ncurses
+  - net-tools
+  - netavark
+  - nfs-utils-coreos
+  - nftables
+  - nss-altfiles
+  - nvme-cli
+  - openssh-clients
+  - openssh-server
+  - openssl
+  - ostree
+  - passwd
+  - podman
+  - podman-plugins
+  - rpm-ostree
+  - selinux-policy-targeted
+  - sg3_utils
+  - shadow-utils
+  - skopeo
+  - slirp4netns
+  - socat
+  - ssh-key-dir
   - sssd-ad
+  - sssd-client
   - sssd-ipa
   - sssd-krb5
   - sssd-ldap
-  - attr
-  - openssl
-  - lsof
-  - ncurses
-  - kbd
-  - zram-generator
-  - systemd-resolved
-  - rpm-ostree
-  - ostree
-  - nss-altfiles
-  - systemd
-  - bootc
-  - gdisk
-  - btrfs-progs
-  - dosfstools
-  - e2fsprogs
-  - xfsprogs
-  - bootupd
-  - fwupd
-  # This should not be a separate package
-  - systemd-networkd
-  - hostname
-  # Route manipulation and QoS
-  - iproute
-  - iproute-tc
-  # Firewall manipulation
-  - iptables
-  - nftables
-  # Interactive network tools for admins
-  - socat
-  - net-tools
-  - bind-utils
-  # NTP support
-  - chrony
-  # Storage configuration/management
-  - cryptsetup
-  # Needed for tpm2 bound luks
-  - tpm2-tools
-  - e2fsprogs
-  - sg3_utils
-  - xfsprogs
-  - lvm2
-  # User configuration
-  - passwd
-  - shadow-utils
-  - acl
-  # Manipulating the kernel keyring; used by bootc
-  - keyutils
-  # SELinux policy
-  - selinux-policy-targeted
-  # There are things that write outside of the journal still (such as the
-  # classic wtmp, etc.). auditd also writes outside the journal but it has its
-  # own log rotation.
-  # Anything package layered will also tend to expect files dropped in
-  # /etc/logrotate.d to work. Really, this is a legacy thing, but if we don't
-  # have it then people's disks will slowly fill up with logs.
-  - logrotate
-  # Boost starving threads
-  # https://github.com/coreos/fedora-coreos-tracker/issues/753
   - stalld
-  - ssh-key-dir
-  # Basic user tools
-  - jq
-  - bash-completion
-  - coreutils
-  - file
-  - less
   - sudo
-  # File compression/decompression
-  ## bsdtar - dependency of 35coreos-live dracut module
-  - bsdtar
-  - bzip2
-  - gzip
+  - systemd
+  - systemd-container
+  - systemd-networkd
+  - systemd-resolved
   - tar
+  - tpm2-tools
+  - xfsprogs
+  - xfsprogs
   - xz
+  - zram-generator
   - zstd
-  # kdump support
-  # https://github.com/coreos/fedora-coreos-tracker/issues/622
-  - kexec-tools
-  # Remote Access
-  - openssh-clients
-  - openssh-server
-  # Container tooling
-  - crun
-  - podman
-  - skopeo
-  # nvme-cli for managing nvme disks
-  - nvme-cli
-  - kernel
-  - kernel-tools
-  - linux-firmware
 
-# Include the qemu-user-static-x86 package on aarch64 and s390x FCOS images
-# to allow access to the large inventory of containers only built for x86_64.
-# https://github.com/coreos/fedora-coreos-tracker/issues/1237
 packages-x86_64:
-  - irqbalance
+  - efibootmgr
   - grub2
   - grub2-efi-x64
-  - efibootmgr
-  - shim
+  - irqbalance
   - microcode_ctl
+  - shim
 packages-ppc64le:
+  - grub2
   - irqbalance
   - librtas
+  - ostree-grub2
   - powerpc-utils-core
   - ppc64-diag-rtas
-  - grub2
-  - ostree-grub2
 packages-aarch64:
-  - irqbalance
-  - grub2-efi-aa64
   - efibootmgr
+  - grub2-efi-aa64
+  - irqbalance
   - shim
 
-# Things we don't expect to ship on the host.  We currently
-# have recommends: false so these could only come in via
-# hard requirement, in which case the build will fail.
 exclude-packages:
-  - perl
-  - perl-interpreter
-  - nodejs
-  - grubby
-  - cowsay
-  - initscripts
-  - plymouth
   - NetworkManager
   - NetworkManager-cloud-setup
   - NetworkManager-initscripts-ifcfg-rh
   - NetworkManager-team
   - NetworkManager-tui
+  - cowsay
+  - grubby
+  - initscripts
   - kernel-debug-core
+  - nodejs
+  - perl
+  - perl-interpreter
+  - plymouth
 
 postprocess:
   # Undo RPM scripts enabling units; we want the presets to be canonical
