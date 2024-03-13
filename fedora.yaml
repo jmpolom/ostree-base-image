@@ -14,11 +14,3 @@ include:
 packages:
   # We include this for historical reasons
   - fedora-repos-ostree
-  # file-transfer: note fuse-sshfs is not in RHEL
-  # so we can't put it in file-transfer.yaml
-  # Storage
-  - btrfs-progs
-  # In F35+ need `iptables-legacy` package
-  # See https://github.com/coreos/fedora-coreos-tracker/issues/676#issuecomment-928028451
-  - iptables-legacy
-  - nano-default-editor

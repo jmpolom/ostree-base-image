@@ -1,4 +1,3 @@
-
 # Modern defaults we want
 boot-location: modules
 # This one at least historically broke compatibility with Anaconda, but
@@ -74,6 +73,7 @@ packages:
   - iproute
   - iproute-tc
   - iptables
+  - iptables-legacy
   - iptables-nft
   - iptables-services
   - jq
@@ -89,6 +89,7 @@ packages:
   - lsof
   - lvm2
   - nano
+  - nano-default-editor
   - ncurses
   - net-tools
   - netavark
