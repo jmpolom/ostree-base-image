@@ -1,7 +1,0 @@
-# Enable the Linux kernel.
-packages:
- - kernel
- - linux-firmware
-
-exclude-packages:
-  - kernel-debug
