@@ -44,7 +44,6 @@ automatic-version-prefix: "${releasever}.<date:%Y%m%d>"
 mutate-os-release: "${releasever}"
 
 packages:
-  - WALinuxAgent-udev
   - aardvark-dns
   - acl
   - attr
@@ -62,7 +61,6 @@ packages:
   - cryptsetup
   - dnsmasq
   - dosfstools
-  - e2fsprogs
   - e2fsprogs
   - file
   - fuse-overlayfs
@@ -138,13 +136,6 @@ packages-x86_64:
   - irqbalance
   - microcode_ctl
   - shim
-packages-ppc64le:
-  - grub2
-  - irqbalance
-  - librtas
-  - ostree-grub2
-  - powerpc-utils-core
-  - ppc64-diag-rtas
 packages-aarch64:
   - efibootmgr
   - grub2-efi-aa64
