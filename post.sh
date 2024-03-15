@@ -86,5 +86,5 @@ fi
 mkdir -p /usr/lib/dracut/dracut.conf.d
 cat > /usr/lib/dracut/dracut.conf.d/20-basic.conf << 'EOF'
 hostonly=no
-dracutmodules+=" kernel-modules dracut-systemd systemd-initrd base ostree virtiosfs lvm crypt tpm2-tss "
+dracutmodules+=" kernel-modules dracut-systemd systemd-initrd base ostree virtiofs lvm crypt tpm2-tss "
 EOF
