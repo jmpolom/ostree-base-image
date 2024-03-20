@@ -49,6 +49,7 @@ packages:
   - aardvark-dns
   - acl
   - attr
+  - audit
   - bash-completion
   - bind-utils
   - bootc
@@ -61,15 +62,22 @@ packages:
   - coreutils
   - crun
   - cryptsetup
+  - curl
+  - dhcp-client
   - dnsmasq
   - dosfstools
   - e2fsprogs
+  - ethtool
   - file
   - fuse-overlayfs
   - fwupd
   - gdisk
+  - git
   - gzip
   - hostname
+  - htop
+  - iftop
+  - iperf3
   - iproute
   - iproute-tc
   - iptables
@@ -82,17 +90,19 @@ packages:
   - kernel-tools
   - kexec-tools
   - keyutils
+  - knot-resolver
+  - knot-utils
   - less
   - libsss_sudo
   - linux-firmware
   - logrotate
   - lsof
   - lvm2
-  - nano
-  - nano-default-editor
+  - man-db
+  - mtr
   - ncurses
-  - net-tools
   - netavark
+  - netperf
   - nfs-utils-coreos
   - nftables
   - nss-altfiles
@@ -101,6 +111,7 @@ packages:
   - openssh-server
   - openssl
   - ostree
+  - passt
   - passwd
   - podman
   - podman-plugins
@@ -117,15 +128,16 @@ packages:
   - sssd-ipa
   - sssd-krb5
   - sssd-ldap
-  - stalld
   - sudo
   - systemd
   - systemd-container
   - systemd-networkd
+  - systemd-oomd-defaults
   - systemd-resolved
   - tar
   - tpm2-tools
-  - xfsprogs
+  - vim
+  - vim-default-editor
   - xfsprogs
   - xz
   - zram-generator
