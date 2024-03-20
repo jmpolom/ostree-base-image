@@ -167,6 +167,4 @@ exclude-packages:
   - initscripts
   - kernel-debug-core
   - nodejs
-  - perl
-  - perl-interpreter
   - plymouth
