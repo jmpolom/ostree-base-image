@@ -40,20 +40,6 @@ EOF
 # tmpfiles gives up on that before getting to `/var/roothome`.
 sed -ie 's, /root, /var/roothome,' /usr/lib/tmpfiles.d/provision.conf
 
-# See also https://github.com/openshift/os/blob/f6cde963ee140c02364674db378b2bc4ac42675b/common.yaml#L156
-# This one undoes the effect of
-# # RHEL-only: Disable /tmp on tmpfs.
-# Wants=tmp.mount
-# in /usr/lib/systemd/system/basic.target
-# We absolutely must have tmpfs-on-tmp for multiple reasons,
-# but the biggest is that when we have composefs for / it's read-only,
-# and for units with ProtectSystem=full systemd clones / but needs
-# a writable place.
-mkdir -p /usr/lib/systemd/system/local-fs.target.wants
-if [[ ! -f /usr/lib/systemd/system/local-fs.target.wants/tmp.mount ]]; then
-  ln -sf ../tmp.mount /usr/lib/systemd/system/local-fs.target.wants
-fi
-
 # dracut
 mkdir -p /usr/lib/dracut/dracut.conf.d
 cat > /usr/lib/dracut/dracut.conf.d/20-basic.conf << 'EOF'
