@@ -33,13 +33,6 @@ cat > /usr/lib/systemd/journald.conf.d/10-centos-bootc-persistent.conf << 'EOF'
 Storage=persistent
 EOF
 
-# Make kdump ignore `ignition.firstboot` when copying kargs from
-# the running kernel to the kdump kernel when passing to be kexec.
-# This makes it so kdump can be set up on the very first boot.
-# Upstream request to have this upstream so we can stop carrying it here:
-# https://lists.fedoraproject.org/archives/list/kexec@lists.fedoraproject.org/thread/5P4WIJLW2TSGF4PZGRZGOXYML4RXZU23/
-sed -i -e 's/KDUMP_COMMANDLINE_REMOVE="/KDUMP_COMMANDLINE_REMOVE="ignition.firstboot /' /etc/sysconfig/kdump
-
 # See https://github.com/containers/bootc/issues/358
 # basically systemd-tmpfiles doesn't follow symlinks; ordinarily our
 # tmpfiles.d unit for `/var/roothome` is fine, but this actually doesn't
