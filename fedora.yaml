@@ -12,5 +12,6 @@ include:
   - base.yaml
 
 packages:
-  # We include this for historical reasons
-  - fedora-repos-ostree
+  - git
+  - knot-resolver
+  - knot-utils
