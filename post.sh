@@ -1,20 +1,13 @@
 #!/usr/bin/env bash
 
+set -xeuo pipefail
+
 # Undo RPM scripts enabling units; we want the presets to be canonical
 # https://github.com/projectatomic/rpm-ostree/issues/1803
-set -xeuo pipefail
 rm -rf /etc/systemd/system/*
 systemctl preset-all
 rm -rf /etc/systemd/user/*
 systemctl --user --global preset-all
-
-# See: https://github.com/coreos/fedora-coreos-tracker/issues/1253
-#      https://bugzilla.redhat.com/show_bug.cgi?id=2112857
-#      https://github.com/coreos/rpm-ostree/issues/3918
-# Temporary workaround to remove the SetGID binary from liblockfile that is
-# pulled by the s390utils but not needed for /usr/sbin/zipl.
-set -xeuo pipefail
-rm -f /usr/bin/dotlockfile
 
 # Set up default root config
 mkdir -p /usr/lib/ostree
@@ -24,7 +17,6 @@ readonly = true
 EOF
 
 # bootupd
-set -xeuo pipefail
 # Until we have https://github.com/coreos/rpm-ostree/pull/2275
 mkdir -p /run
 # Transforms /usr/lib/ostree-boot into a bootupd-compatible update payload
@@ -64,7 +56,6 @@ sed -ie 's, /root, /var/roothome,' /usr/lib/tmpfiles.d/provision.conf
 # but the biggest is that when we have composefs for / it's read-only,
 # and for units with ProtectSystem=full systemd clones / but needs
 # a writable place.
-set -xeuo pipefail
 mkdir -p /usr/lib/systemd/system/local-fs.target.wants
 if [[ ! -f /usr/lib/systemd/system/local-fs.target.wants/tmp.mount ]]; then
   ln -sf ../tmp.mount /usr/lib/systemd/system/local-fs.target.wants
