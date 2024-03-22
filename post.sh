@@ -2,12 +2,12 @@
 
 set -xeuo pipefail
 
-# Undo RPM scripts enabling units; we want the presets to be canonical
-# https://github.com/projectatomic/rpm-ostree/issues/1803
-rm -rf /etc/systemd/system/*
-systemctl preset-all
-rm -rf /etc/systemd/user/*
-systemctl --user --global preset-all
+# Install filesystem type (mandatory)
+mkdir -p /usr/lib/bootc/install
+cat > /usr/lib/bootc/install/00-fedora-ostree-base.toml << EOF
+[install.filesystem.root]
+type = "btrfs"
+EOF
 
 # Set up default root config
 mkdir -p /usr/lib/ostree
@@ -15,6 +15,13 @@ cat > /usr/lib/ostree/prepare-root.conf << EOF
 [sysroot]
 readonly = true
 EOF
+
+# Undo RPM scripts enabling units; we want the presets to be canonical
+# https://github.com/projectatomic/rpm-ostree/issues/1803
+rm -rf /etc/systemd/system/*
+systemctl preset-all
+rm -rf /etc/systemd/user/*
+systemctl --user --global preset-all
 
 # bootupd
 # Until we have https://github.com/coreos/rpm-ostree/pull/2275
