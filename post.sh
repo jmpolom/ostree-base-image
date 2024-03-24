@@ -51,5 +51,5 @@ sed -ie 's, /root, /var/roothome,' /usr/lib/tmpfiles.d/provision.conf
 mkdir -p /usr/lib/dracut/dracut.conf.d
 cat > /usr/lib/dracut/dracut.conf.d/20-basic.conf << 'EOF'
 hostonly=no
-dracutmodules+=" kernel-modules dracut-systemd systemd-initrd base ostree virtiofs lvm crypt tpm2-tss "
+dracutmodules+=" kernel-modules dracut-systemd systemd-initrd base ostree virtiofs tpm2-tss "
 EOF
