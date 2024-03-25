@@ -5,8 +5,8 @@ set -xeuo pipefail
 # Install filesystem type (mandatory)
 mkdir -p /usr/lib/bootc/install
 cat > /usr/lib/bootc/install/00-fedora-ostree-base.toml << EOF
-[install.filesystem.root]
-type = "btrfs"
+[install]
+root-fs-type = "btrfs"
 EOF
 
 # Set up default root config
