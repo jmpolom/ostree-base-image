@@ -152,9 +152,7 @@ packages-aarch64:
   - shim
 
 exclude-packages:
-  - NetworkManager
   - NetworkManager-cloud-setup
-  - NetworkManager-initscripts-ifcfg-rh
   - NetworkManager-team
   - NetworkManager-tui
   - cowsay
