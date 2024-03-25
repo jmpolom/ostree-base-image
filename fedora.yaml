@@ -3,6 +3,7 @@ releasever: 39
 repos:
   - fedora
   - fedora-updates
+  - bootc-fedora
 
 metadata:
   name: fedora-ostree-base
@@ -10,6 +11,11 @@ metadata:
 
 include:
   - base.yaml
+
+repo-packages:
+  - repo: bootc-fedora
+    packages:
+      - bootc
 
 packages:
   - git
