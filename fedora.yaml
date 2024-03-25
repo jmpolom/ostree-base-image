@@ -1,8 +1,10 @@
-releasever: 40
+releasever: 39
+variables:
+  distro: "eln"
 
 repos:
-  - fedora-next
-  - fedora-next-updates
+  - eln-baseos
+  - eln-appstream
 
 metadata:
   name: fedora-ostree-base
