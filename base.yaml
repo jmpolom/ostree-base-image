@@ -4,7 +4,7 @@ boot-location: modules
 # let's use it by default now.
 machineid-compat: true
 # Be minimal
-recommends: false
+recommends: true
 # This should be default
 tmp-is-dir: true
 
