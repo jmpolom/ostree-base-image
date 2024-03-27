@@ -100,7 +100,7 @@ packages:
   - ncurses
   - netavark
   - netperf
-  - nfs-utils-coreos
+  - nfs-utils
   - nftables
   - nss-altfiles
   - nvme-cli
