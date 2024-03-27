@@ -27,7 +27,7 @@ systemctl --user --global preset-all
 # Until we have https://github.com/coreos/rpm-ostree/pull/2275
 mkdir -p /run
 # Transforms /usr/lib/ostree-boot into a bootupd-compatible update payload
-/usr/bin/bootupctl backend generate-update-metadata /
+/usr/bin/bootupctl backend generate-update-metadata
 
 # Taken from https://github.com/coreos/fedora-coreos-config/blob/aa4373201f415baff85701f7f96ab0583931af6c/overlay.d/05core/usr/lib/systemd/journald.conf.d/10-coreos-persistent.conf#L5
 # Hardcode persistent journal by default. journald has this "auto" behaviour
