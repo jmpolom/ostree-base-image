@@ -1,8 +1,8 @@
-releasever: 40
+releasever: 39
 
 repos:
-  - fedora-next
-  - fedora-next-updates
+  - fedora
+  - fedora-updates
   - bootc-fedora
 
 metadata:
