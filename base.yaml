@@ -145,12 +145,12 @@ packages-x86_64:
   - grub2-efi-x64
   - irqbalance
   - microcode_ctl
-  - shim-x64-15.6-2
-#packages-aarch64:
-#  - efibootmgr
-#  - grub2-efi-aa64
-#  - irqbalance
-#  - shim
+  - shim
+packages-aarch64:
+  - efibootmgr
+  - grub2-efi-aa64
+  - irqbalance
+  - shim
 
 exclude-packages:
   - NetworkManager
