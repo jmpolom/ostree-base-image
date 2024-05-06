@@ -90,7 +90,6 @@ packages:
   - kexec-tools
   - keyutils
   - less
-  - libsss_sudo
   - linux-firmware
   - logrotate
   - lsof
@@ -112,6 +111,7 @@ packages:
   - passwd
   - podman
   - podman-plugins
+  - rootfiles
   - rpm-ostree
   - selinux-policy-targeted
   - sg3_utils
@@ -119,11 +119,6 @@ packages:
   - skopeo
   - slirp4netns
   - socat
-  - sssd-ad
-  - sssd-client
-  - sssd-ipa
-  - sssd-krb5
-  - sssd-ldap
   - sudo
   - systemd
   - systemd-networkd
@@ -137,6 +132,7 @@ packages:
   - xfsprogs
   - xz
   - zram-generator
+  - zram-generator-defaults
   - zstd
 
 packages-x86_64:
