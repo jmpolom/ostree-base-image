@@ -46,6 +46,8 @@ mutate-os-release: "${releasever}"
 
 postprocess-script: post.sh
 
+container-cmd: /usr/bin/bash
+
 packages:
   - aardvark-dns
   - acl
