@@ -110,7 +110,6 @@ packages:
   - passwd
   - podman
   - podman-plugins
-  - rootfiles
   - rpm-ostree
   - selinux-policy-targeted
   - sg3_utils
