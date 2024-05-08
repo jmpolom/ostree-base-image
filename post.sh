@@ -45,6 +45,16 @@ EOF
 # work if we want to use tmpfiles.d to write to `/root/.ssh` because
 # tmpfiles gives up on that before getting to `/var/roothome`.
 sed -ie 's, /root, /var/roothome,' /usr/lib/tmpfiles.d/provision.conf
+# Because /var/roothome is also defined in rpm-ostree-0-integration.conf
+# we need to delete /var/roothome
+sed -ie '/^d- \/var\/roothome /d' /usr/lib/tmpfiles.d/provision.conf
+
+# hack to get rootfiles for bash
+cat > /usr/lib/tmpfiles.d/rootfiles-bash.conf << 'EOF'
+C!  /var/roothome/.bashrc           -       -       -       -       /usr/etc/skel/.bashrc
+C!  /var/roothome/.bash_profile     -       -       -       -       /usr/etc/skel/.bash_profile
+C!  /var/roothome/.bash_logout      -       -       -       -       /usr/etc/skel/.bash_logout
+EOF
 
 # dracut
 mkdir -p /usr/lib/dracut/dracut.conf.d
