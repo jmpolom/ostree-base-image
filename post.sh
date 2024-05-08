@@ -16,8 +16,8 @@ cat > /usr/lib/ostree/prepare-root.conf << EOF
 readonly = true
 EOF
 
-# Undo RPM scripts enabling units; we want the presets to be canonical
-# https://github.com/projectatomic/rpm-ostree/issues/1803
+# Undo RPM scripts enabling units; this uses defined service presets.
+# This could and should be removed if systemd-firstboot use is desired.
 rm -rf /etc/systemd/system/*
 systemctl preset-all
 rm -rf /etc/systemd/user/*
@@ -29,13 +29,12 @@ mkdir -p /run
 # Transforms /usr/lib/ostree-boot into a bootupd-compatible update payload
 /usr/bin/bootupctl backend generate-update-metadata
 
-# Taken from https://github.com/coreos/fedora-coreos-config/blob/aa4373201f415baff85701f7f96ab0583931af6c/overlay.d/05core/usr/lib/systemd/journald.conf.d/10-coreos-persistent.conf#L5
-# Hardcode persistent journal by default. journald has this "auto" behaviour
-# that only makes logs persistent if `/var/log/journal` exists, which it won't
-# on first boot because `/var` isn't fully populated. We should be able to get
-# rid of this once we move to sysusers and create the dir in the initrd.
+# Persistent journal by default. journald "auto" behaviour only makes logs
+# persistent if `/var/log/journal` exists, which it doesn't on first boot
+# because `/var` isn't fully populated. We should be able to get rid of this
+# once we move to sysusers and create the dir in the initrd.
 mkdir -p /usr/lib/systemd/journald.conf.d/
-cat > /usr/lib/systemd/journald.conf.d/10-centos-bootc-persistent.conf << 'EOF'
+cat > /usr/lib/systemd/journald.conf.d/10-bootc-persistent.conf << 'EOF'
 [Journal]
 Storage=persistent
 EOF
