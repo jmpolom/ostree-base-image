@@ -1,7 +1,6 @@
-# Modern defaults we want
+# Kernel modules go in /usr/lib/modules
 boot-location: modules
-# This one at least historically broke compatibility with Anaconda, but
-# let's use it by default now.
+# systemd-firstboot disabled because /usr//etc/machine-id created during build
 machineid-compat: true
 # Be minimal
 recommends: false
