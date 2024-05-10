@@ -48,7 +48,6 @@ container-cmd:
   - /usr/bin/bash
 
 packages:
-  - aardvark-dns
   - acl
   - attr
   - audit
@@ -60,9 +59,7 @@ packages:
   - btrfs-progs
   - bzip2
   - chrony
-  - containernetworking-plugins
   - coreutils
-  - crun
   - cryptsetup
   - curl
   - dhcp-client
@@ -72,7 +69,6 @@ packages:
   - e2fsprogs
   - ethtool
   - file
-  - fuse-overlayfs
   - fwupd
   - gdisk
   - gzip
@@ -95,7 +91,6 @@ packages:
   - lvm2
   - man-db
   - mtr
-  - netavark
   - netperf
   - nfs-utils
   - nftables
@@ -105,16 +100,10 @@ packages:
   - openssh-server
   - openssl
   - ostree
-  - passt
   - passwd
-  - podman
-  - podman-plugins
   - rpm-ostree
   - selinux-policy-targeted
-  - sg3_utils
   - shadow-utils
-  - skopeo
-  - slirp4netns
   - socat
   - sudo
   - systemd
