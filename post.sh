@@ -62,3 +62,10 @@ cat > /usr/lib/dracut/dracut.conf.d/20-basic.conf << 'EOF'
 hostonly=no
 add_dracutmodules+=" kernel-modules dracut-systemd systemd-initrd base ostree virtiofs lvm crypt tpm2-tss "
 EOF
+
+# keep it lean, default to no recommends with dnf
+mkdir -p /etc/dnf
+cat > /etc/dnf/dnf.conf << 'EOF'
+[main]
+install_weak_deps=False
+EOF

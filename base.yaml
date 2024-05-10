@@ -66,6 +66,7 @@ packages:
   - cryptsetup
   - curl
   - dhcp-client
+  - dnf5
   - dnsmasq
   - dosfstools
   - e2fsprogs
@@ -81,8 +82,6 @@ packages:
   - iperf3
   - iproute
   - iproute-tc
-  - iptables
-  - iptables-nft
   - jq
   - kbd
   - kernel
@@ -96,7 +95,6 @@ packages:
   - lvm2
   - man-db
   - mtr
-  - ncurses
   - netavark
   - netperf
   - nfs-utils
