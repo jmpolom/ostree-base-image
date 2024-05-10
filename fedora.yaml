@@ -10,8 +10,3 @@ metadata:
 
 include:
   - base.yaml
-
-packages:
-  - git
-  - knot-resolver
-  - knot-utils
