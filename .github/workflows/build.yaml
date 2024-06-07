@@ -28,8 +28,5 @@ jobs:
       - name: Login
         run: podman login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io
         if: github.event_name != 'pull_request'
-      # Make force triggering a build always build the image
-      - run: echo "force_initialize=1" >> $GITHUB_ENV
-        if: github.event_name == 'workflow_dispatch'
       - name: Build ostree container
-        run: rpm-ostree compose image --format=registry ${force_initialize:+--initialize} fedora-${{ matrix.release_version }}.yaml ghcr.io/${{ github.repository_owner }}/fedora-ostree-base:${{ matrix.release_version }}-${{ github.ref_name }}
+        run: rpm-ostree compose image --format=registry --initialize-mode if-not-exists fedora-${{ matrix.release_version }}.yaml ghcr.io/${{ github.repository_owner }}/fedora-ostree-base:${{ matrix.release_version }}-${{ github.ref_name }}
