@@ -82,7 +82,6 @@ packages:
   - kbd
   - kernel
   - kernel-tools
-  - kexec-tools
   - keyutils
   - less
   - linux-firmware
