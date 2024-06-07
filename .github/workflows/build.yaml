@@ -1,37 +1,35 @@
-name: Build
-
+name: Build and push ostree container
 on:
   workflow_dispatch:
   push:
     branches:
       - main
-
-env:
-  REGISTRY: ghcr.io
-
-permissions:
-  contents: read
-  packages: write
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     container:
-      # Yes, we're using this as a *builder* image.
       image: quay.io/fedora/fedora-coreos:stable
       options: "--user root --privileged -v /var/tmp:/var/tmp -v /tmp:/tmp"
+    strategy:
+      matrix:
+        release_version:
+          - "39"
+          - "40"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         # https://github.com/actions/checkout/issues/760
       - name: Mark git checkout as safe
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Install deps
         run: rpm-ostree install distribution-gpg-keys
       - name: Login
-        run: podman login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+        run: podman login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io
         if: github.event_name != 'pull_request'
       # Make force triggering a build always build the image
       - run: echo "force_initialize=1" >> $GITHUB_ENV
         if: github.event_name == 'workflow_dispatch'
       - name: Build ostree container
-        run: rpm-ostree compose image --format=registry ${force_initialize:+--initialize} fedora.yaml ${{ env.REGISTRY }}/${{ github.repository_owner }}/fedora-ostree-base:latest
+        run: rpm-ostree compose image --format=registry ${force_initialize:+--initialize} fedora-${{ matrix.release_version }}.yaml ghcr.io/${{ github.repository_owner }}/fedora-ostree-base:${{ matrix.release_version }}-${{ github.ref_name }}

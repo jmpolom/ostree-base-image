@@ -1,0 +1,12 @@
+releasever: 40
+
+repos:
+  - fedora
+  - fedora-updates
+
+metadata:
+  name: fedora-ostree-base
+  summary: Fedora base image
+
+include:
+  - base.yaml
