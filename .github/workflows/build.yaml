@@ -16,8 +16,8 @@ jobs:
     strategy:
       matrix:
         release_version:
-          - "39"
           - "40"
+          - "41"
     steps:
       - uses: actions/checkout@v4
         # https://github.com/actions/checkout/issues/760
